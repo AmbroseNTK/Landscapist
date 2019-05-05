@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".UploadActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <android.support.v7.widget.Toolbar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary">
+            <TextView
+                    android:id="@+id/tvInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Select images"
+                android:textColor="#fff"/>
+            <Button android:id="@+id/btSubmit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="100px"
+                    android:text="Submit"/>
+        </android.support.v7.widget.Toolbar>
+        <ProgressBar android:id="@+id/progressUpload"
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content"
+                     android:indeterminate="false"
+                     style="?android:attr/progressBarStyleHorizontal"
+                     android:progress="0"/>
+        <Spinner android:id="@+id/spinnerTag"
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:prompt="@string/prompt_select_tag"/>
+        <ListView android:id="@+id/listImage"
+                  android:layout_width="match_parent"
+                  android:layout_height="match_parent"/>
+    </LinearLayout>
+</android.support.constraint.ConstraintLayout>

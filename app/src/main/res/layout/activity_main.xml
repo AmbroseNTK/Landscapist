@@ -26,6 +26,10 @@
                 android:gravity="center"
                 android:textColor="#fff"
                 />
+            <Button android:id="@+id/btUpload"
+                    android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:layout_marginLeft="50pt"
+                    android:text="Upload"/>
         </android.support.v7.widget.Toolbar>
         <TextureView
             android:id="@+id/cameraPreview"

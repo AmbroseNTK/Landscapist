@@ -3,6 +3,7 @@ package ntk.ambrose.landscapist;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.ImageFormat;
@@ -35,6 +36,7 @@ import android.util.SparseIntArray;
 import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -50,6 +52,8 @@ import com.google.firebase.*;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import ntk.ambrose.landscapist.adapters.ListImageAdapter;
+import ntk.ambrose.landscapist.models.ImageElement;
 
 public class MainActivity extends AppCompatActivity implements LocationListener {
 
@@ -75,6 +79,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     private ImageReader imageReader;
     private static final int REQUEST_CAMERA_PERMISSION = 200;
     private FloatingActionButton btCapture;
+    private Button btUpload;
 
 
     private static final SparseIntArray ORIENTATIONS = new SparseIntArray();
@@ -95,23 +100,26 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     ProgressBar progressWaiting;
     TextView tvInfo;
     Location location;
+    ArrayList<ImageElement> imageList;
 
     @SuppressLint("RestrictedApi")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        imageList = new ArrayList<>();
         progressWaiting = findViewById(R.id.progressWaiting);
         tvInfo = findViewById(R.id.tvInfo);
         btCapture = findViewById(R.id.btCapture);
         btCapture.setVisibility(View.GONE);
+        btUpload = findViewById(R.id.btUpload);
+        btUpload.setVisibility(View.GONE);
         tvInfo.setText("Get your location first...");
         // Create a storage reference from our app
-        FirebaseStorage storage = FirebaseStorage.getInstance();
-        final StorageReference storageRef = storage.getReference();
+
 
 // Create a reference to "mountains.jpg"
-        StorageReference captured = storageRef.child("mountains.jpg");
+        //StorageReference captured = storageRef.child("mountains.jpg");
 
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -121,41 +129,42 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         else{
            requestLocation();
            initCameraPreview();
-
             btCapture.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
 
                     if(textureView.getBitmap()!=null) {
-                        tvInfo.setText("Captured an image");
+                        tvInfo.setText("You have captured "+(imageList.size()+1)+" images");
                         //Captured
-                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
                         Bitmap bitmap = textureView.getBitmap();
-                        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                        byte[] data = baos.toByteArray();
+                        ImageElement element = new ImageElement();
+                        element.setData(bitmap);
+                        element.setLocation(location.getLatitude()+";"+location.getLongitude());
+                        element.setSelected(true);
+                        imageList.add(element);
+                        btUpload.setVisibility(View.VISIBLE);
 
-                        UploadTask uploadTask = storageRef.child("capture/"+location.getLongitude()+";"+location.getLatitude()+".jpg").putBytes(data);
-                        uploadTask.addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception exception) {
-                                tvInfo.setText("Cannot submit this image");
-                            }
-                        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                            @Override
-                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                               tvInfo.setText("Submitted successfully");
-                            }
-                        });
                     }
                 }
             });
         }
+
+        btUpload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Storage.getInstance().putData("imageList",imageList);
+                startActivity(new Intent(MainActivity.this,UploadActivity.class));
+            }
+        });
 
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        startActivity(new Intent(MainActivity.this,MainActivity.class));
+        finish();
+        initCameraPreview();
         requestLocation();
         if (textureView.isAvailable()) {
             openCamera();

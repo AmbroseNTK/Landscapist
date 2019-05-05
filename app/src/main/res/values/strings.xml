@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">Landscapist</string>
+    <string name="prompt_select_tag">Select tag</string>
+    <string name="captured_image">Captured image</string>
+    <string name="selected">Selected</string>
 </resources>
