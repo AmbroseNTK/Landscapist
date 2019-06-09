@@ -34,6 +34,8 @@ public class UploadActivity extends AppCompatActivity {
     private FirebaseDatabase database;
     int success = 0;
     int total = 0;
+    String uuid;
+    String fileName;
     String[] tagID = {
             "CHN",
             "CLN",
@@ -102,10 +104,10 @@ public class UploadActivity extends AppCompatActivity {
                         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
                         byte[] data = baos.toByteArray();
 
-                        String uuid = UUID.randomUUID().toString();
-                        String fileName = element.getLocation() + ";" + element.getTag() +";"+uuid;
+                        uuid = UUID.randomUUID().toString();
+                        fileName = element.getLocation() + ";" + element.getTag() +";"+uuid;
 
-                        database.getReference("capture/").child(uuid).setValue(fileName);
+
 
                         UploadTask uploadTask = storageRef.child("capture/" + fileName + ".jpg").putBytes(data);
                         uploadTask.addOnFailureListener(new OnFailureListener() {
@@ -123,6 +125,7 @@ public class UploadActivity extends AppCompatActivity {
                                 progressUpload.setProgress(success);
                                 if(success == total){
                                     Toast.makeText(getBaseContext(),"Submit successfully",Toast.LENGTH_LONG).show();
+                                    database.getReference("capture/").child(uuid).setValue(fileName);
                                     Storage.getInstance().removeAll();
                                     startActivity(new Intent(UploadActivity.this,MainActivity.class));
                                 }
