@@ -1,34 +1,34 @@
 {
   "project_info": {
-    "project_number": "397244653809",
-    "firebase_url": "https://geo-image-collection.firebaseio.com",
-    "project_id": "geo-image-collection",
-    "storage_bucket": "geo-image-collection.appspot.com"
+    "project_number": "552250521926",
+    "firebase_url": "https://geo-project-x.firebaseio.com",
+    "project_id": "geo-project-x",
+    "storage_bucket": "geo-project-x.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:397244653809:android:0621d5ad35bd845b",
+        "mobilesdk_app_id": "1:552250521926:android:0621d5ad35bd845b",
         "android_client_info": {
           "package_name": "ntk.ambrose.landscapist"
         }
       },
       "oauth_client": [
         {
-          "client_id": "397244653809-ar7rqiieeu5cdl16o6sdb3hmq7q4aqms.apps.googleusercontent.com",
+          "client_id": "552250521926-19k9q2frj9mdrg1b2a6vub0r3a10incl.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyB7BchOiS4tAYID882Z0DzLlnwHTcTqL30"
+          "current_key": "AIzaSyCtXWv4AKjMX8mmPbfBoW3R3ZHFTCUoUj0"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "397244653809-ar7rqiieeu5cdl16o6sdb3hmq7q4aqms.apps.googleusercontent.com",
+              "client_id": "552250521926-19k9q2frj9mdrg1b2a6vub0r3a10incl.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

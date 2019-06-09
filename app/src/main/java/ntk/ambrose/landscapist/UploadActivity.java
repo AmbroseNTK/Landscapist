@@ -32,6 +32,17 @@ public class UploadActivity extends AppCompatActivity {
     private final StorageReference storageRef = storage.getReference();
     int success = 0;
     int total = 0;
+    String[] tagID = {
+            "CHN",
+            "CLN",
+            "TSN",
+            "ODT",
+            "SKK",
+            "DGT",
+            "SON",
+            "PNK",
+            "BCS"
+    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,17 +56,21 @@ public class UploadActivity extends AppCompatActivity {
         progressUpload = findViewById(R.id.progressUpload);
         listImage.setAdapter(adapter);
         tagList = new ArrayList<>();
-        tagList.add("đất hoang");
-        tagList.add("đất xây dựng nhà ở");
-        tagList.add("đất ruộng");
-        tagList.add("rừng");
-        tagList.add("đất quy hoạch");
+        tagList.add("Cây hằng năm - CHN");
+        tagList.add("Cây lâu năm - CLN");
+        tagList.add("Thủy hải sản - TSN");
+        tagList.add("Đất đô thị - ODT");
+        tagList.add("Khu sản xuất, kinh doanh - SKK");
+        tagList.add("Đất mục đích công cộng - DGT");
+        tagList.add("Sông ngòi, kênh rạch - SON");
+        tagList.add("Phi nông nghiệp - PNK");
+        tagList.add("Chưa sử dụng - BCS");
         spinnerTag.setAdapter(new ArrayAdapter<String>(getBaseContext(),R.layout.support_simple_spinner_dropdown_item,tagList));
         spinnerTag.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 for(int k =0;k<adapter.getCount();k++) {
-                    adapter.getItem(k).setTag("T"+spinnerTag.getSelectedItemId());
+                    adapter.getItem(k).setTag(tagID[(int)spinnerTag.getSelectedItemId()]);
                 }
             }
 
