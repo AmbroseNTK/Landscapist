@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.*;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -30,6 +31,7 @@ public class UploadActivity extends AppCompatActivity {
     ProgressBar progressUpload;
     private FirebaseStorage storage = FirebaseStorage.getInstance();
     private final StorageReference storageRef = storage.getReference();
+    private FirebaseDatabase database;
     int success = 0;
     int total = 0;
     String[] tagID = {
@@ -48,6 +50,7 @@ public class UploadActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_upload);
         final ArrayList<ImageElement> imageList = Storage.getInstance().getData("imageList");
+        database = FirebaseDatabase.getInstance();
         adapter = new ListImageAdapter(getBaseContext(),R.layout.list_image,imageList);
         listImage = findViewById(R.id.listImage);
         spinnerTag = findViewById(R.id.spinnerTag);
@@ -89,6 +92,7 @@ public class UploadActivity extends AppCompatActivity {
                 progressUpload.setProgress(0);
                 progressUpload.setMax(total);
                 listImage.setEnabled(false);
+
                 for(int k =0;k<adapter.getCount();k++) {
                     ImageElement element = adapter.getItem(k);
                     if(element.isSelected()) {
@@ -98,7 +102,12 @@ public class UploadActivity extends AppCompatActivity {
                         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
                         byte[] data = baos.toByteArray();
 
-                        UploadTask uploadTask = storageRef.child("capture/" + element.getLocation() + ";" + element.getTag() +";"+UUID.randomUUID().toString()+ ".jpg").putBytes(data);
+                        String uuid = UUID.randomUUID().toString();
+                        String fileName = element.getLocation() + ";" + element.getTag() +";"+uuid;
+
+                        database.getReference("capture/").child(uuid).setValue(fileName);
+
+                        UploadTask uploadTask = storageRef.child("capture/" + fileName + ".jpg").putBytes(data);
                         uploadTask.addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception exception) {
